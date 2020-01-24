@@ -58,7 +58,7 @@ buildAppJob.with {
             events {
                 refUpdated()
             }
-            project(projectFolderName + '/' + referenceAppgitRepo, 'plain:master')
+            project(projectFolderName + '/' + referenceAppgitRepo, 'master')
             configure { node ->
                 node / serverName("ADOP Gerrit")
             }
