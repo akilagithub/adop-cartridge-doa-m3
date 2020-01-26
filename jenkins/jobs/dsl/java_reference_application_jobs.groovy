@@ -167,11 +167,14 @@ sonar.scm.enabled=false''')
         }
     }
     publishers {
-        buildPipelineTrigger(projectFolderName + "/Reference_Application_Deploy") {
-          parameters {
-              predefinedProp("B",'${B}')
-              predefinedProp("PARENT_BUILD",'${PARENT_BUILD}')        
-          }
+        downstreamParameterized {
+            trigger(projectFolderName + "/Reference_Application_Deploy") {
+                condition("UNSTABLE_OR_BETTER")
+                parameters {
+                    predefinedProp("B", '${B}')
+                    predefinedProp("PARENT_BUILD", '${PARENT_BUILD}')
+                }
+            }
         }
     }
 }
@@ -405,10 +408,6 @@ performanceTestJob.with {
             |sed -i "s/###TOKEN_RESPONSE_TIME###/10000/g" ${WORKSPACE}/src/test/scala/default/RecordedSimulation.scala
             |'''.stripMargin()
         )
-        maven {
-            goals('gatling:execute')
-            mavenInstallation('ADOP Maven')
-        }
     }
     publishers {
         publishHtml {
